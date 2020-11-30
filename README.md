@@ -1,6 +1,6 @@
 # fs
 
-一个全面的 golang 文件操作库
+一个全面的 Go 语言文件操作 package，API 参照 nodejs 中 fs-extra 的设计，简单易用
 
 `import "github.com/minph/fs"`
 
@@ -8,6 +8,8 @@
 
 - [func AppendBytes(src string, content []byte) error](#AppendBytes)
 - [func AppendString(src, content string) error](#AppendString)
+- [func AsDir(c Common) bool](#AsDir)
+- [func AsFile(c Common) bool](#AsFile)
 - [func CopyDir(folder, target string) error](#CopyDir)
 - [func CopyFile(src, target string) error](#CopyFile)
 - [func CopyFileSafe(src, target string) error](#CopyFileSafe)
@@ -100,6 +102,22 @@ func AppendString(src, content string) error
 ```
 
 AppendString 以字符串方式追加文件内容
+
+## <a name="AsDir">func</a> AsDir
+
+```go
+func AsDir(c Common) bool
+```
+
+AsDir 尝试转为 DirKind
+
+## <a name="AsFile">func</a> AsFile
+
+```go
+func AsFile(c Common) bool
+```
+
+AsFile 尝试转为 FileKind
 
 ## <a name="CopyDir">func</a> CopyDir
 
@@ -774,55 +792,17 @@ WriteStringAt 在文件指定位置写入内容
 ```go
 type FileKind interface {
     Common
-
-    // ReadBytes 读取文件返回字符串
     ReadBytes() ([]byte, error)
-
-    // ReadString 读取文件返回字符串
     ReadString() (string, error)
-
-    // ReadByRow 按行读取文件内容
     ReadByRow() ([]string, error)
-
-    // ReadByBytes 按块方式读取文件内容
     ReadByBytes(bufferSize int64) ([][]byte, error)
-
-    // ReadAt 读取指定位置之后内容
-    //
-    // 正数则从开始到最后定位
-    // 负数则从最后到开始定位
     ReadAt(position int64) ([]byte, error)
-
-    // ReadStringAt 读取指定位置之后内容
-    // 返回字符串
-    // 正数则从开始到最后定位
-    // 负数则从最后到开始定位
     ReadStringAt(position int64) (string, error)
-
-    // AppendBytes 追加文件内容
     AppendBytes(content []byte) error
-
-    // AppendString 追加文件内容
     AppendString(content string) error
-
-    // Rewrite 重写文件内容
     Rewrite(content string) error
-
-    // WriteAt 在文件指定位置写入内容
-    //
-    // 正数则从开始到最后定位
-    // 负数则从最后到开始定位
     WriteAt(position int64, content []byte) error
-
-    // WriteStringAt 在文件指定位置写入内容
-    // 传入字符串数据即可
-    // 正数则从开始到最后定位
-    // 负数则从最后到开始定位
     WriteStringAt(src string, position int64, content string) error
-
-    // Truncate 截短文件内容，使文件为指定长度
-    // 传入 0 则清空文件
-    // 传入负数则截短该数值长度
     Truncate(length int64)
 }
 ```
