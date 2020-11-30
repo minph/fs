@@ -8,8 +8,6 @@
 
 - [func AppendBytes(src string, content []byte) error](#AppendBytes)
 - [func AppendString(src, content string) error](#AppendString)
-- [func AsDir(c Common) bool](#AsDir)
-- [func AsFile(c Common) bool](#AsFile)
 - [func CopyDir(folder, target string) error](#CopyDir)
 - [func CopyFile(src, target string) error](#CopyFile)
 - [func CopyFileSafe(src, target string) error](#CopyFileSafe)
@@ -44,6 +42,7 @@
 - [type Common](#Common)
   - [func New(path string) Common](#New)
 - [type Dir](#Dir)
+  - [func AsDir(c Common) (\*Dir, bool)](#AsDir)
   - [func NewDir(path string) \*Dir](#NewDir)
   - [func (d \*Dir) All() ([]string, error)](#Dir.All)
   - [func (d \*Dir) Copy(target string) error](#Dir.Copy)
@@ -51,6 +50,8 @@
   - [func (d \*Dir) Exist() bool](#Dir.Exist)
   - [func (d \*Dir) Info() ([]os.FileInfo, error)](#Dir.Info)
   - [func (d \*Dir) IsDir() bool](#Dir.IsDir)
+  - [func (d \*Dir) Join(src string) string](#Dir.Join)
+  - [func (d \*Dir) JoinBase(src string) string](#Dir.JoinBase)
   - [func (d \*Dir) Move(target string) error](#Dir.Move)
   - [func (d \*Dir) Path() string](#Dir.Path)
   - [func (d \*Dir) Remove() error](#Dir.Remove)
@@ -64,6 +65,7 @@
   - [func (d \*Dir) Subfolder() ([]string, error)](#Dir.Subfolder)
 - [type DirKind](#DirKind)
 - [type File](#File)
+  - [func AsFile(c Common) (\*File, bool)](#AsFile)
   - [func NewFile(path string) \*File](#NewFile)
   - [func (f \*File) AppendBytes(content []byte) error](#File.AppendBytes)
   - [func (f \*File) AppendString(content string) error](#File.AppendString)
@@ -71,6 +73,8 @@
   - [func (f \*File) Create() error](#File.Create)
   - [func (f \*File) Exist() bool](#File.Exist)
   - [func (f \*File) IsDir() bool](#File.IsDir)
+  - [func (f \*File) Join(folder string) string](#File.Join)
+  - [func (f \*File) JoinBase(folder string) string](#File.JoinBase)
   - [func (f \*File) Move(target string) error](#File.Move)
   - [func (f \*File) Path() string](#File.Path)
   - [func (f \*File) ReadAt(position int64) ([]byte, error)](#File.ReadAt)
@@ -102,22 +106,6 @@ func AppendString(src, content string) error
 ```
 
 AppendString 以字符串方式追加文件内容
-
-## <a name="AsDir">func</a> AsDir
-
-```go
-func AsDir(c Common) bool
-```
-
-AsDir 类型断言[*fs.Dir]
-
-## <a name="AsFile">func</a> AsFile
-
-```go
-func AsFile(c Common) bool
-```
-
-AsFile类型断言[*fs.File]
 
 ## <a name="CopyDir">func</a> CopyDir
 
@@ -227,7 +215,7 @@ IsDir 判断是不是文件夹
 func Move(src, target string) error
 ```
 
-Move 移动文件或文件夹 
+Move 移动文件或文件夹
 
 ## <a name="MoveSafe">func</a> MoveSafe
 
@@ -345,10 +333,11 @@ RemoveNamesRegexp 目录下所有文件中，删除文件名匹配正则表达�
 ## <a name="Rename">func</a> Rename
 
 ```go
-func Rename(src, target string) error
+func Rename(src, newName string) error
 ```
 
-Rename 重命名文件 不修改目录路径，只修改文件名
+Rename 重命名文件
+不修改目录路径，只修改文件名
 
 ## <a name="Rewrite">func</a> Rewrite
 
@@ -402,6 +391,8 @@ type Common interface {
     Exist() bool
     IsDir() bool
     Path() string
+    Join(src string) string
+    JoinBase(src string) string
 }
 ```
 
@@ -425,6 +416,14 @@ type Dir struct {
 ```
 
 Dir 目录
+
+### <a name="AsDir">func</a> AsDir
+
+```go
+func AsDir(c Common) (*Dir, bool)
+```
+
+AsDir 类型断言[*fs.Dir]
 
 ### <a name="NewDir">func</a> NewDir
 
@@ -483,6 +482,22 @@ func (d *Dir) IsDir() bool
 ```
 
 IsDir 判断是文件夹或文件
+
+### <a name="Dir.Join">func</a> (\*Dir) Join
+
+```go
+func (d *Dir) Join(src string) string
+```
+
+Join 以此目录为基础目录，拼接完整路径
+
+### <a name="Dir.JoinBase">func</a> (\*Dir) JoinBase
+
+```go
+func (d *Dir) JoinBase(src string) string
+```
+
+JoinBase 以此目录为基础目录，只拼接一级路径
 
 ### <a name="Dir.Move">func</a> (\*Dir) Move
 
@@ -603,6 +618,14 @@ type File struct {
 
 File 文件
 
+### <a name="AsFile">func</a> AsFile
+
+```go
+func AsFile(c Common) (*File, bool)
+```
+
+AsFile 类型断言[*fs.File]
+
 ### <a name="NewFile">func</a> NewFile
 
 ```go
@@ -658,6 +681,22 @@ func (f *File) IsDir() bool
 ```
 
 IsDir 判断是文件夹或文件
+
+### <a name="File.Join">func</a> (\*File) Join
+
+```go
+func (f *File) Join(folder string) string
+```
+
+Join 以此目录为基础目录，拼接完整路径
+
+### <a name="File.JoinBase">func</a> (\*File) JoinBase
+
+```go
+func (f *File) JoinBase(folder string) string
+```
+
+JoinBase 以此目录为基础目录，只拼接一级路径
 
 ### <a name="File.Move">func</a> (\*File) Move
 

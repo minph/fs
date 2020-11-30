@@ -1,6 +1,9 @@
 package fs
 
-import "os"
+import (
+	"os"
+	"path"
+)
 
 // File 文件
 type File struct {
@@ -17,6 +20,8 @@ type Common interface {
 	Exist() bool
 	IsDir() bool
 	Path() string
+	Join(src string) string
+	JoinBase(src string) string
 }
 
 // New 在不判断文件夹还是文件的情况下，支持通用方法接口
@@ -176,6 +181,16 @@ func (f *File) Truncate(length int64) error {
 	return Truncate(f.path, length)
 }
 
+// Join 以此目录为基础目录，拼接完整路径
+func (f *File) Join(folder string) string {
+	return path.Join(folder, f.path)
+}
+
+// JoinBase 以此目录为基础目录，只拼接一级路径
+func (f *File) JoinBase(folder string) string {
+	return path.Join(folder, path.Base(f.path))
+}
+
 // Dir 目录
 type Dir struct {
 	path string
@@ -287,4 +302,14 @@ func (d *Dir) Move(target string) error {
 // Rename 重命名文件夹
 func (d *Dir) Rename(newName string) error {
 	return Rename(d.path, newName)
+}
+
+// Join 以此目录为基础目录，拼接完整路径
+func (d *Dir) Join(src string) string {
+	return path.Join(d.path, src)
+}
+
+// JoinBase 以此目录为基础目录，只拼接一级路径
+func (d *Dir) JoinBase(src string) string {
+	return path.Join(d.path, path.Base(src))
 }
