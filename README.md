@@ -36,7 +36,7 @@
 - [func RemoveExt(folder, ext string) error](#RemoveExt)
 - [func RemoveNamesContain(folder, containStr string) error](#RemoveNamesContain)
 - [func RemoveNamesRegexp(folder, pattern string) error](#RemoveNamesRegexp)
-- [func Rename(src, target string) error](#Rename)
+- [func Rename(src, newName string) error](#Rename)
 - [func Rewrite(src, content string) error](#Rewrite)
 - [func Truncate(src string, length int64) error](#Truncate)
 - [func WriteAt(src string, position int64, content []byte) error](#WriteAt)
@@ -58,7 +58,7 @@
   - [func (d \*Dir) RemoveExt(ext string) error](#Dir.RemoveExt)
   - [func (d \*Dir) RemoveNamesContain(containStr string) error](#Dir.RemoveNamesContain)
   - [func (d \*Dir) RemoveNamesRegexp(pattern string) error](#Dir.RemoveNamesRegexp)
-  - [func (d \*Dir) Rename(target string) error](#Dir.Rename)
+  - [func (d \*Dir) Rename(newName string) error](#Dir.Rename)
   - [func (d \*Dir) Sub() ([]string, error)](#Dir.Sub)
   - [func (d \*Dir) Subfile() ([]string, error)](#Dir.Subfile)
   - [func (d \*Dir) Subfolder() ([]string, error)](#Dir.Subfolder)
@@ -80,7 +80,7 @@
   - [func (f \*File) ReadString() (string, error)](#File.ReadString)
   - [func (f \*File) ReadStringAt(position int64) (string, error)](#File.ReadStringAt)
   - [func (f \*File) Remove() error](#File.Remove)
-  - [func (f \*File) Rename(target string) error](#File.Rename)
+  - [func (f \*File) Rename(newName string) error](#File.Rename)
   - [func (f \*File) Rewrite(content string) error](#File.Rewrite)
   - [func (f \*File) Truncate(length int64) error](#File.Truncate)
   - [func (f \*File) WriteAt(position int64, content []byte) error](#File.WriteAt)
@@ -227,9 +227,7 @@ IsDir 判断是不是文件夹
 func Move(src, target string) error
 ```
 
-Move 移动文件或文件夹
-
-和 Rename 同义，函数名不一致是为了语义的区别
+Move 移动文件或文件夹 
 
 ## <a name="MoveSafe">func</a> MoveSafe
 
@@ -350,7 +348,7 @@ RemoveNamesRegexp 目录下所有文件中，删除文件名匹配正则表达�
 func Rename(src, target string) error
 ```
 
-Rename 重命名文件
+Rename 重命名文件 不修改目录路径，只修改文件名
 
 ## <a name="Rewrite">func</a> Rewrite
 
@@ -400,7 +398,7 @@ type Common interface {
     Copy(target string) error
     Remove() error
     Move(target string) error
-    Rename(target string) error
+    Rename(newName string) error
     Exist() bool
     IsDir() bool
     Path() string
@@ -545,7 +543,7 @@ RemoveNamesRegexp 目录下所有文件中，删除文件名匹配正则表达�
 ### <a name="Dir.Rename">func</a> (\*Dir) Rename
 
 ```go
-func (d *Dir) Rename(target string) error
+func (d *Dir) Rename(newName string) error
 ```
 
 Rename 重命名文件夹
@@ -742,7 +740,7 @@ Remove 删除文件
 ### <a name="File.Rename">func</a> (\*File) Rename
 
 ```go
-func (f *File) Rename(target string) error
+func (f *File) Rename(newName string) error
 ```
 
 Rename 重命名文件

@@ -13,7 +13,7 @@ type Common interface {
 	Copy(target string) error
 	Remove() error
 	Move(target string) error
-	Rename(target string) error
+	Rename(newName string) error
 	Exist() bool
 	IsDir() bool
 	Path() string
@@ -93,8 +93,8 @@ func (f *File) Move(target string) error {
 }
 
 // Rename 重命名文件
-func (f *File) Rename(target string) error {
-	return MoveSafe(f.path, target)
+func (f *File) Rename(newName string) error {
+	return Rename(f.path, newName)
 }
 
 // Exist 判断文件是否存在
@@ -285,6 +285,6 @@ func (d *Dir) Move(target string) error {
 }
 
 // Rename 重命名文件夹
-func (d *Dir) Rename(target string) error {
-	return MoveSafe(d.path, target)
+func (d *Dir) Rename(newName string) error {
+	return Rename(d.path, newName)
 }

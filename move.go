@@ -1,17 +1,20 @@
 package fs
 
-import "os"
+import (
+	"os"
+	"path"
+)
 
 // Rename 重命名文件
-func Rename(src, target string) error {
-	return os.Rename(src, target)
+// 不修改目录路径，只修改文件名
+func Rename(src, newName string) error {
+	newPath := path.Join(path.Dir(src), newName)
+	return os.Rename(src, newPath)
 }
 
 // Move 移动文件或文件夹
-//
-// 和 Rename 同义，函数名不一致是为了语义的区别
 func Move(src, target string) error {
-	return Rename(src, target)
+	return os.Rename(src, target)
 }
 
 // MoveSafe 安全地移动文件或文件夹
