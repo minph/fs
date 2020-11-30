@@ -109,7 +109,7 @@ AppendString 以字符串方式追加文件内容
 func AsDir(c Common) bool
 ```
 
-AsDir 尝试转为 DirKind
+AsDir 类型断言[*fs.Dir]
 
 ## <a name="AsFile">func</a> AsFile
 
@@ -117,7 +117,7 @@ AsDir 尝试转为 DirKind
 func AsFile(c Common) bool
 ```
 
-AsFile 尝试转为 FileKind
+AsFile类型断言[*fs.File]
 
 ## <a name="CopyDir">func</a> CopyDir
 

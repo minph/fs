@@ -27,17 +27,17 @@ func New(path string) Common {
 	return &File{path}
 }
 
-// AsDir 尝试转为 DirKind
-func AsDir(c Common) bool {
-	_, can := c.(DirKind)
+// AsDir 类型断言[*fs.Dir]
+func AsDir(c Common) (*Dir, bool) {
+	value, ok := c.(*Dir)
 
-	return can
+	return value, ok
 }
 
-// AsFile 尝试转为 FileKind
-func AsFile(c Common) bool {
-	_, can := c.(FileKind)
-	return can
+// AsFile 类型断言[*fs.File]
+func AsFile(c Common) (*File, bool) {
+	value, ok := c.(*File)
+	return value, ok
 }
 
 // FileKind 文件方法接口
