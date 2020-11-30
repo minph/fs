@@ -16,6 +16,16 @@ func openFile(src string) (*os.File, error) {
 	return file, nil
 }
 
+func appendFile(src string) (*os.File, error) {
+	//打开文件
+	file, err := os.OpenFile(src, os.O_WRONLY|os.O_CREATE|os.O_APPEND, os.ModePerm)
+	if err != nil {
+		return nil, err
+	}
+
+	return file, nil
+}
+
 // Rewrite 对文件覆盖写入数据
 func Rewrite(src, content string) error {
 	//打开文件
@@ -34,7 +44,7 @@ func Rewrite(src, content string) error {
 func AppendBytes(src string, content []byte) error {
 
 	// 追加方式打开文件
-	file, err := openFile(src)
+	file, err := appendFile(src)
 	defer file.Close()
 
 	if err != nil {
