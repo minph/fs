@@ -6,10 +6,22 @@ import (
 	"os"
 )
 
+func openFile(src string) (*os.File, error) {
+	//打开文件
+	file, err := os.OpenFile(src, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, os.ModePerm)
+	if err != nil {
+		return nil, err
+	}
+
+	return file, nil
+}
+
 // Rewrite 对文件覆盖写入数据
 func Rewrite(src, content string) error {
 	//打开文件
-	file, err := os.OpenFile(src, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, os.ModePerm)
+	file, err := openFile(src)
+	defer file.Close()
+
 	if err != nil {
 		return err
 	}
@@ -22,7 +34,7 @@ func Rewrite(src, content string) error {
 func AppendByte(src string, content []byte) error {
 
 	// 追加方式打开文件
-	file, err := os.OpenFile(src, os.O_WRONLY|os.O_APPEND|os.O_CREATE, os.ModePerm)
+	file, err := openFile(src)
 	defer file.Close()
 
 	if err != nil {
@@ -43,4 +55,70 @@ func AppendByte(src string, content []byte) error {
 // AppendString 以字符串方式追加文件内容
 func AppendString(src, content string) error {
 	return AppendByte(src, []byte(content))
+}
+
+// WriteAt 在文件指定位置写入内容
+//
+// 正数则从开始到最后定位
+// 负数则从最后到开始定位
+func WriteAt(src string, position int64, content []byte) error {
+	// 打开文件
+	file, err := readFile(src)
+	defer file.Close()
+	if err != nil {
+		return err
+	}
+
+	// 获取文件字节数
+	bytes, err := ReadByte(src)
+	if err != nil {
+		return err
+	}
+
+	// 获取定位
+	if position >= 0 {
+		file.Seek(position, 0)
+	} else {
+		file.Seek(int64(len(bytes))+position, 0)
+	}
+
+	// 写入内容
+	_, err = file.Write(content)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// WriteStringAt 在文件指定位置写入内容
+// 传入字符串数据即可
+// 正数则从开始到最后定位
+// 负数则从最后到开始定位
+func WriteStringAt(src string, position int64, content string) error {
+	// 打开文件
+	file, err := readFile(src)
+	defer file.Close()
+	if err != nil {
+		return err
+	}
+
+	// 获取文件字节数
+	bytes, err := ReadByte(src)
+	if err != nil {
+		return err
+	}
+
+	// 获取定位
+	if position < 0 {
+		position = int64(len(bytes)) + position
+	}
+
+	// 写入内容
+	_, err = file.WriteAt([]byte(content), position)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

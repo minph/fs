@@ -4,35 +4,29 @@ golang 文件操作库
 
 `import "github.com/minph/fs"`
 
-- [Overview](#pkg-overview)
-- [Index](#pkg-index)
-- [Subdirectories](#pkg-subdirectories)
-
-## <a name="pkg-overview">Overview</a>
-
-## <a name="pkg-index">Index</a>
+# 概览
 
 - [func AppendByte(src string, content []byte) error](#AppendByte)
 - [func AppendString(src, content string) error](#AppendString)
+- [func CopyDir(folder, target string) error](#CopyDir)
 - [func CopyFile(src, target string) error](#CopyFile)
 - [func CopyFileSafe(src, target string) error](#CopyFileSafe)
 - [func CreateDir(folder string) error](#CreateDir)
 - [func CreateFile(src string) error](#CreateFile)
 - [func Dir(folder string) ([]os.FileInfo, error)](#Dir)
 - [func DirAll(folder string) ([]string, error)](#DirAll)
-- [func DirAllMap(folder string, mapFunc StringMapFunc) error](#DirAllMap)
-- [func DirMap(folder string, mapFunc func(index int, fileInfo \*os.FileInfo)) error](#DirMap)
 - [func DirSub(folder string) ([]string, error)](#DirSub)
 - [func DirSubfile(folder string) ([]string, error)](#DirSubfile)
 - [func DirSubfolder(folder string) ([]string, error)](#DirSubfolder)
 - [func Exist(path string) bool](#Exist)
-- [func MoveFile(src, target string) error](#MoveFile)
-- [func MoveFileSafe(src, target string) error](#MoveFileSafe)
-- [func ReadAt(src string, position int64)](#ReadAt)
+- [func Move(src, target string) error](#Move)
+- [func MoveSafe(src, target string) error](#MoveSafe)
+- [func ReadAt(src string, position int64) ([]byte, error)](#ReadAt)
 - [func ReadByBytes(src string, bufferSize int64) ([][]byte, error)](#ReadByBytes)
 - [func ReadByRow(src string) ([]string, error)](#ReadByRow)
 - [func ReadByte(src string) ([]byte, error)](#ReadByte)
 - [func ReadString(src string) (string, error)](#ReadString)
+- [func ReadStringAt(src string, position int64) (string, error)](#ReadStringAt)
 - [func Remove(src string) error](#Remove)
 - [func RemoveAll(src string) error](#RemoveAll)
 - [func RemoveDir(folder string) error](#RemoveDir)
@@ -41,9 +35,11 @@ golang 文件操作库
 - [func RemoveNamesRegexp(folder, pattern string) error](#RemoveNamesRegexp)
 - [func Rename(src, target string) error](#Rename)
 - [func Rewrite(src, content string) error](#Rewrite)
-- [func StringMap(stringArray []string, mapFunc StringMapFunc)](#StringMap)
 - [func Truncate(src string, length int64) error](#Truncate)
-- [type StringMapFunc](#StringMapFunc)
+- [func WriteAt(src string, position int64, content []byte) error](#WriteAt)
+- [func WriteStringAt(src string, position int64, content string) error](#WriteStringAt)
+
+# 详情
 
 ## <a name="AppendByte">func</a> AppendByte
 
@@ -61,6 +57,14 @@ func AppendString(src, content string) error
 
 AppendString 以字符串方式追加文件内容
 
+## <a name="CopyDir">func</a> CopyDir
+
+```go
+func CopyDir(folder, target string) error
+```
+
+CopyDir 复制文件夹
+
 ## <a name="CopyFile">func</a> CopyFile
 
 ```go
@@ -75,7 +79,9 @@ CopyFile 复制文件
 func CopyFileSafe(src, target string) error
 ```
 
-CopyFileSafe 安全地移动文件
+CopyFileSafe 安全地复制文件
+
+保证复制位置文件存在
 
 ## <a name="CreateDir">func</a> CreateDir
 
@@ -111,22 +117,6 @@ DirAll 读取目录和子目录下的所有文件名信息
 
 全部为文件名，不再包含目录名
 
-## <a name="DirAllMap">func</a> DirAllMap
-
-```go
-func DirAllMap(folder string, mapFunc StringMapFunc) error
-```
-
-DirAllMap 所有文件名挂载匿名函数
-
-## <a name="DirMap">func</a> DirMap
-
-```go
-func DirMap(folder string, mapFunc func(index int, fileInfo *os.FileInfo)) error
-```
-
-DirMap 原生方法读取目录信息，并附加匿名函数
-
 ## <a name="DirSub">func</a> DirSub
 
 ```go
@@ -161,31 +151,35 @@ func Exist(path string) bool
 
 Exist 判断所给路径文件或文件夹是否存在
 
-## <a name="MoveFile">func</a> MoveFile
+## <a name="Move">func</a> Move
 
 ```go
-func MoveFile(src, target string) error
+func Move(src, target string) error
 ```
 
-MoveFile 移动文件
+Move 移动文件或文件夹
 
 和 Rename 同义，函数名不一致是为了语义的区别
 
-## <a name="MoveFileSafe">func</a> MoveFileSafe
+## <a name="MoveSafe">func</a> MoveSafe
 
 ```go
-func MoveFileSafe(src, target string) error
+func MoveSafe(src, target string) error
 ```
 
-MoveFileSafe 安全地移动文件
+MoveSafe 安全地移动文件或文件夹
+保证跨目录的安全性
 
 ## <a name="ReadAt">func</a> ReadAt
 
 ```go
-func ReadAt(src string, position int64)
+func ReadAt(src string, position int64) ([]byte, error)
 ```
 
 ReadAt 读取指定位置之后内容
+
+正数则从开始到最后定位
+负数则从最后到开始定位
 
 ## <a name="ReadByBytes">func</a> ReadByBytes
 
@@ -218,6 +212,17 @@ func ReadString(src string) (string, error)
 ```
 
 ReadString 读取文件全部内容并返回字符串
+
+## <a name="ReadStringAt">func</a> ReadStringAt
+
+```go
+func ReadStringAt(src string, position int64) (string, error)
+```
+
+ReadStringAt 读取指定位置之后内容
+返回字符串
+正数则从开始到最后定位
+负数则从最后到开始定位
 
 ## <a name="Remove">func</a> Remove
 
@@ -285,14 +290,6 @@ func Rewrite(src, content string) error
 
 Rewrite 对文件覆盖写入数据
 
-## <a name="StringMap">func</a> StringMap
-
-```go
-func StringMap(stringArray []string, mapFunc StringMapFunc)
-```
-
-StringMap 对字符串数组或切片，进行匿名函数操作
-
 ## <a name="Truncate">func</a> Truncate
 
 ```go
@@ -303,10 +300,24 @@ Truncate 截短文件内容，使文件为指定长度
 传入 0 则清空文件
 传入负数则截短该数值长度
 
-## <a name="StringMapFunc">type</a> StringMapFunc
+## <a name="WriteAt">func</a> WriteAt
 
 ```go
-type StringMapFunc func(index int, file string)
+func WriteAt(src string, position int64, content []byte) error
 ```
 
-StringMapFunc 对字符串数组或切片的匿名函数
+WriteAt 在文件指定位置写入内容
+
+正数则从开始到最后定位
+负数则从最后到开始定位
+
+## <a name="WriteStringAt">func</a> WriteStringAt
+
+```go
+func WriteStringAt(src string, position int64, content string) error
+```
+
+WriteStringAt 在文件指定位置写入内容
+传入字符串数据即可
+正数则从开始到最后定位
+负数则从最后到开始定位

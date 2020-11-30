@@ -114,31 +114,3 @@ func DirAll(folder string) ([]string, error) {
 
 	return result, nil
 }
-
-// DirMap 原生方法读取目录信息，并附加匿名函数
-func DirMap(folder string, mapFunc func(index int, fileInfo *os.FileInfo)) error {
-
-	// 读取目录
-	info, err := Dir(folder)
-	if err != nil {
-		return err
-	}
-
-	for index, item := range info {
-		mapFunc(index, &item)
-	}
-
-	return nil
-}
-
-// DirAllMap 所有文件名挂载匿名函数
-func DirAllMap(folder string, mapFunc StringMapFunc) error {
-	result, err := DirAll(folder)
-	if err != nil {
-		return err
-	}
-
-	StringMap(result, mapFunc)
-
-	return nil
-}

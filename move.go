@@ -7,15 +7,16 @@ func Rename(src, target string) error {
 	return os.Rename(src, target)
 }
 
-// MoveFile 移动文件
+// Move 移动文件或文件夹
 //
 // 和 Rename 同义，函数名不一致是为了语义的区别
-func MoveFile(src, target string) error {
+func Move(src, target string) error {
 	return Rename(src, target)
 }
 
-// MoveFileSafe 安全地移动文件
-func MoveFileSafe(src, target string) error {
+// MoveSafe 安全地移动文件或文件夹
+// 保证跨目录的安全性
+func MoveSafe(src, target string) error {
 	err := CreateFile(src)
 
 	if err != nil {
@@ -27,6 +28,6 @@ func MoveFileSafe(src, target string) error {
 		return err
 	}
 
-	return MoveFile(src, target)
+	return Move(src, target)
 
 }
