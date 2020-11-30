@@ -17,8 +17,8 @@ func readFile(src string) (*os.File, error) {
 	return file, nil
 }
 
-// ReadByte 读取文件全部内容
-func ReadByte(src string) ([]byte, error) {
+// ReadBytes 读取文件全部内容
+func ReadBytes(src string) ([]byte, error) {
 
 	// 打开文件
 	file, err := readFile(src)
@@ -119,7 +119,7 @@ func ReadAt(src string, position int64) ([]byte, error) {
 
 	// 获取文件字节数
 
-	bytes, err := ReadByte(src)
+	bytes, err := ReadBytes(src)
 	if err != nil {
 		return nil, err
 	}

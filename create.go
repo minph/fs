@@ -5,7 +5,7 @@ import (
 	"path"
 )
 
-//CreateDir 跨目录创建文件夹
+// CreateDir 跨目录创建文件夹
 func CreateDir(folder string) error {
 	if !Exist(folder) {
 		err := os.MkdirAll(folder, os.ModePerm)
@@ -17,7 +17,7 @@ func CreateDir(folder string) error {
 	return nil
 }
 
-//CreateFile 跨目录创建文件
+// CreateFile 跨目录创建文件
 func CreateFile(src string) error {
 
 	// 创建目录

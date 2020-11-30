@@ -7,8 +7,8 @@ import (
 	"path"
 )
 
-// Dir 原生方法读取目录信息
-func Dir(folder string) ([]os.FileInfo, error) {
+// DirInfo 原生方法读取目录信息
+func DirInfo(folder string) ([]os.FileInfo, error) {
 
 	// 读取目录
 	info, err := ioutil.ReadDir(folder)
@@ -25,7 +25,7 @@ func DirSub(folder string) ([]string, error) {
 	var result []string
 
 	// 读取目录
-	info, err := Dir(folder)
+	info, err := DirInfo(folder)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func DirSubfolder(folder string) ([]string, error) {
 	var result []string
 
 	// 读取目录
-	info, err := Dir(folder)
+	info, err := DirInfo(folder)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +65,7 @@ func DirSubfile(folder string) ([]string, error) {
 	var result []string
 
 	// 读取目录
-	info, err := Dir(folder)
+	info, err := DirInfo(folder)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +86,7 @@ func DirAll(folder string) ([]string, error) {
 	var result []string
 
 	// 读取目录
-	info, err := Dir(folder)
+	info, err := DirInfo(folder)
 	if err != nil {
 		return nil, err
 	}

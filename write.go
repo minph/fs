@@ -30,8 +30,8 @@ func Rewrite(src, content string) error {
 	return err
 }
 
-// AppendByte 追加文件内容
-func AppendByte(src string, content []byte) error {
+// AppendBytes 追加文件内容
+func AppendBytes(src string, content []byte) error {
 
 	// 追加方式打开文件
 	file, err := openFile(src)
@@ -54,7 +54,7 @@ func AppendByte(src string, content []byte) error {
 
 // AppendString 以字符串方式追加文件内容
 func AppendString(src, content string) error {
-	return AppendByte(src, []byte(content))
+	return AppendBytes(src, []byte(content))
 }
 
 // WriteAt 在文件指定位置写入内容
@@ -70,7 +70,7 @@ func WriteAt(src string, position int64, content []byte) error {
 	}
 
 	// 获取文件字节数
-	bytes, err := ReadByte(src)
+	bytes, err := ReadBytes(src)
 	if err != nil {
 		return err
 	}
@@ -104,7 +104,7 @@ func WriteStringAt(src string, position int64, content string) error {
 	}
 
 	// 获取文件字节数
-	bytes, err := ReadByte(src)
+	bytes, err := ReadBytes(src)
 	if err != nil {
 		return err
 	}

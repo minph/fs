@@ -21,8 +21,8 @@ func RemoveAll(src string) error {
 	return os.RemoveAll(src)
 }
 
-//RemoveDir  删除目录全部内容，但不包含目录自身
-func RemoveDir(folder string) error {
+//RemoveDirContent  删除目录全部内容，但不包含目录自身
+func RemoveDirContent(folder string) error {
 	content, err := DirSub(folder)
 
 	if err != nil {

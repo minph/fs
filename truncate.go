@@ -11,7 +11,7 @@ func Truncate(src string, length int64) error {
 
 	// 传入负数
 	if length < 0 {
-		content, err := ReadByte(src)
+		content, err := ReadBytes(src)
 		if err != nil {
 			return err
 		}
