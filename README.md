@@ -6,8 +6,6 @@
 
 # 概览
 
-## <a name="pkg-index">Index</a>
-
 - [func AppendBytes(src string, content []byte) error](#AppendBytes)
 - [func AppendString(src, content string) error](#AppendString)
 - [func CopyDir(folder, target string) error](#CopyDir)
@@ -21,6 +19,7 @@
 - [func DirSubfile(folder string) ([]string, error)](#DirSubfile)
 - [func DirSubfolder(folder string) ([]string, error)](#DirSubfolder)
 - [func Exist(path string) bool](#Exist)
+- [func IsDir(path string) bool](#IsDir)
 - [func Move(src, target string) error](#Move)
 - [func MoveSafe(src, target string) error](#MoveSafe)
 - [func ReadAt(src string, position int64) ([]byte, error)](#ReadAt)
@@ -40,13 +39,18 @@
 - [func Truncate(src string, length int64) error](#Truncate)
 - [func WriteAt(src string, position int64, content []byte) error](#WriteAt)
 - [func WriteStringAt(src string, position int64, content string) error](#WriteStringAt)
+- [type Common](#Common)
+  - [func New(path string) Common](#New)
 - [type Dir](#Dir)
   - [func NewDir(path string) \*Dir](#NewDir)
   - [func (d \*Dir) All() ([]string, error)](#Dir.All)
   - [func (d \*Dir) Copy(target string) error](#Dir.Copy)
   - [func (d \*Dir) Create() error](#Dir.Create)
+  - [func (d \*Dir) Exist() bool](#Dir.Exist)
   - [func (d \*Dir) Info() ([]os.FileInfo, error)](#Dir.Info)
+  - [func (d \*Dir) IsDir() bool](#Dir.IsDir)
   - [func (d \*Dir) Move(target string) error](#Dir.Move)
+  - [func (d \*Dir) Path() string](#Dir.Path)
   - [func (d \*Dir) Remove() error](#Dir.Remove)
   - [func (d \*Dir) RemoveContent() error](#Dir.RemoveContent)
   - [func (d \*Dir) RemoveExt(ext string) error](#Dir.RemoveExt)
@@ -56,6 +60,7 @@
   - [func (d \*Dir) Sub() ([]string, error)](#Dir.Sub)
   - [func (d \*Dir) Subfile() ([]string, error)](#Dir.Subfile)
   - [func (d \*Dir) Subfolder() ([]string, error)](#Dir.Subfolder)
+- [type DirKind](#DirKind)
 - [type File](#File)
   - [func NewFile(path string) \*File](#NewFile)
   - [func (f \*File) AppendBytes(content []byte) error](#File.AppendBytes)
@@ -63,7 +68,9 @@
   - [func (f \*File) Copy(target string) error](#File.Copy)
   - [func (f \*File) Create() error](#File.Create)
   - [func (f \*File) Exist() bool](#File.Exist)
+  - [func (f \*File) IsDir() bool](#File.IsDir)
   - [func (f \*File) Move(target string) error](#File.Move)
+  - [func (f \*File) Path() string](#File.Path)
   - [func (f \*File) ReadAt(position int64) ([]byte, error)](#File.ReadAt)
   - [func (f \*File) ReadByBytes(bufferSize int64) ([][]byte, error)](#File.ReadByBytes)
   - [func (f \*File) ReadByRow() ([]string, error)](#File.ReadByRow)
@@ -76,10 +83,9 @@
   - [func (f \*File) Truncate(length int64) error](#File.Truncate)
   - [func (f \*File) WriteAt(position int64, content []byte) error](#File.WriteAt)
   - [func (f \*File) WriteStringAt(src string, position int64, content string) error](#File.WriteStringAt)
+- [type FileKind](#FileKind)
 
 # 详情
-
-## <a name="AppendBytes">func</a> AppendBytes
 
 ```go
 func AppendBytes(src string, content []byte) error
@@ -188,6 +194,14 @@ func Exist(path string) bool
 ```
 
 Exist 判断所给路径文件或文件夹是否存在
+
+## <a name="IsDir">func</a> IsDir
+
+```go
+func IsDir(path string) bool
+```
+
+IsDir 判断是不是文件夹
 
 ## <a name="Move">func</a> Move
 
@@ -360,11 +374,36 @@ WriteStringAt 在文件指定位置写入内容
 正数则从开始到最后定位
 负数则从最后到开始定位
 
+## <a name="Common">type</a> Common
+
+```go
+type Common interface {
+    Create() error
+    Copy(target string) error
+    Remove() error
+    Move(target string) error
+    Rename(target string) error
+    Exist() bool
+    IsDir() bool
+    Path() string
+}
+```
+
+Common 文件夹和文件公用方法接口
+
+### <a name="New">func</a> New
+
+```go
+func New(path string) Common
+```
+
+New 在不判断文件夹还是文件的情况下，支持通用方法接口
+
 ## <a name="Dir">type</a> Dir
 
 ```go
 type Dir struct {
-    Path string
+    // contains filtered or unexported fields
 }
 
 ```
@@ -405,6 +444,14 @@ func (d *Dir) Create() error
 
 Create 创建文件夹
 
+### <a name="Dir.Exist">func</a> (\*Dir) Exist
+
+```go
+func (d *Dir) Exist() bool
+```
+
+Exist 判断文件夹是否存在
+
 ### <a name="Dir.Info">func</a> (\*Dir) Info
 
 ```go
@@ -413,6 +460,14 @@ func (d *Dir) Info() ([]os.FileInfo, error)
 
 Info 原生方法读取目录信息
 
+### <a name="Dir.IsDir">func</a> (\*Dir) IsDir
+
+```go
+func (d *Dir) IsDir() bool
+```
+
+IsDir 判断是文件夹或文件
+
 ### <a name="Dir.Move">func</a> (\*Dir) Move
 
 ```go
@@ -420,6 +475,14 @@ func (d *Dir) Move(target string) error
 ```
 
 Move 移动文件夹
+
+### <a name="Dir.Path">func</a> (\*Dir) Path
+
+```go
+func (d *Dir) Path() string
+```
+
+Path 获取文件路径
 
 ### <a name="Dir.Remove">func</a> (\*Dir) Remove
 
@@ -495,11 +558,29 @@ func (d *Dir) Subfolder() ([]string, error)
 Subfolder 读取目录下的子文件夹
 即不包含子文件
 
+## <a name="DirKind">type</a> DirKind
+
+```go
+type DirKind interface {
+    Common
+    Info() ([]os.FileInfo, error)
+    Sub() ([]string, error)
+    Subfolder() ([]string, error)
+    Subfile() ([]string, error)
+    All() ([]string, error)
+    RemoveContent() error
+    RemoveExt(ext string) error
+    RemoveNamesRegexp(pattern string) error
+}
+```
+
+DirKind 文件夹方法接口
+
 ## <a name="File">type</a> File
 
 ```go
 type File struct {
-    Path string
+    // contains filtered or unexported fields
 }
 
 ```
@@ -554,6 +635,14 @@ func (f *File) Exist() bool
 
 Exist 判断文件是否存在
 
+### <a name="File.IsDir">func</a> (\*File) IsDir
+
+```go
+func (f *File) IsDir() bool
+```
+
+IsDir 判断是文件夹或文件
+
 ### <a name="File.Move">func</a> (\*File) Move
 
 ```go
@@ -561,6 +650,14 @@ func (f *File) Move(target string) error
 ```
 
 Move 移动文件
+
+### <a name="File.Path">func</a> (\*File) Path
+
+```go
+func (f *File) Path() string
+```
+
+Path 获取文件路径
 
 ### <a name="File.ReadAt">func</a> (\*File) ReadAt
 
@@ -671,3 +768,63 @@ WriteStringAt 在文件指定位置写入内容
 传入字符串数据即可
 正数则从开始到最后定位
 负数则从最后到开始定位
+
+## <a name="FileKind">type</a> FileKind
+
+```go
+type FileKind interface {
+    Common
+
+    // ReadBytes 读取文件返回字符串
+    ReadBytes() ([]byte, error)
+
+    // ReadString 读取文件返回字符串
+    ReadString() (string, error)
+
+    // ReadByRow 按行读取文件内容
+    ReadByRow() ([]string, error)
+
+    // ReadByBytes 按块方式读取文件内容
+    ReadByBytes(bufferSize int64) ([][]byte, error)
+
+    // ReadAt 读取指定位置之后内容
+    //
+    // 正数则从开始到最后定位
+    // 负数则从最后到开始定位
+    ReadAt(position int64) ([]byte, error)
+
+    // ReadStringAt 读取指定位置之后内容
+    // 返回字符串
+    // 正数则从开始到最后定位
+    // 负数则从最后到开始定位
+    ReadStringAt(position int64) (string, error)
+
+    // AppendBytes 追加文件内容
+    AppendBytes(content []byte) error
+
+    // AppendString 追加文件内容
+    AppendString(content string) error
+
+    // Rewrite 重写文件内容
+    Rewrite(content string) error
+
+    // WriteAt 在文件指定位置写入内容
+    //
+    // 正数则从开始到最后定位
+    // 负数则从最后到开始定位
+    WriteAt(position int64, content []byte) error
+
+    // WriteStringAt 在文件指定位置写入内容
+    // 传入字符串数据即可
+    // 正数则从开始到最后定位
+    // 负数则从最后到开始定位
+    WriteStringAt(src string, position int64, content string) error
+
+    // Truncate 截短文件内容，使文件为指定长度
+    // 传入 0 则清空文件
+    // 传入负数则截短该数值长度
+    Truncate(length int64)
+}
+```
+
+FileKind 文件方法接口

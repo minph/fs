@@ -7,6 +7,15 @@ import (
 	"path"
 )
 
+// IsDir 判断是不是文件夹
+func IsDir(path string) bool {
+	stat, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+	return stat.IsDir()
+}
+
 // DirInfo 原生方法读取目录信息
 func DirInfo(folder string) ([]os.FileInfo, error) {
 
