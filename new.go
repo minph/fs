@@ -23,9 +23,21 @@ type Common interface {
 func New(path string) Common {
 	if IsDir(path) {
 		return &Dir{path}
-	} else {
-		return &File{path}
 	}
+	return &File{path}
+}
+
+// AsDir 尝试转为 DirKind
+func AsDir(c Common) bool {
+	_, can := c.(DirKind)
+
+	return can
+}
+
+// AsFile 尝试转为 FileKind
+func AsFile(c Common) bool {
+	_, can := c.(FileKind)
+	return can
 }
 
 // FileKind 文件方法接口
