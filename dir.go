@@ -40,7 +40,7 @@ func DirSub(folder string) ([]string, error) {
 	}
 
 	for _, item := range info {
-		result = append(result, path.Join(folder, item.Name()))
+		result = append(result, FormatPath(path.Join(folder, item.Name())))
 	}
 
 	return result, nil
@@ -60,7 +60,7 @@ func DirSubfolder(folder string) ([]string, error) {
 
 	for _, item := range info {
 		if item.IsDir() {
-			result = append(result, path.Join(folder, item.Name()))
+			result = append(result, FormatPath(path.Join(folder, item.Name())))
 		}
 	}
 
@@ -81,7 +81,7 @@ func DirSubfile(folder string) ([]string, error) {
 
 	for _, item := range info {
 		if !item.IsDir() {
-			result = append(result, path.Join(folder, item.Name()))
+			result = append(result, FormatPath(path.Join(folder, item.Name())))
 		}
 	}
 
@@ -116,7 +116,7 @@ func DirAll(folder string) ([]string, error) {
 			}
 
 			for _, subItem := range subInfo {
-				result = append(result, subItem)
+				result = append(result, FormatPath(subItem))
 			}
 		}
 	}

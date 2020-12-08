@@ -1,6 +1,7 @@
 package fs
 
 import (
+	"fmt"
 	"os"
 	"path"
 )
@@ -8,6 +9,7 @@ import (
 // File 文件
 type File struct {
 	path string
+	Rows int
 }
 
 // Common 文件夹和文件公用方法接口
@@ -27,9 +29,9 @@ type Common interface {
 // New 在不判断文件夹还是文件的情况下，支持通用方法接口
 func New(path string) Common {
 	if IsDir(path) {
-		return &Dir{path}
+		return NewDir(path)
 	}
-	return &File{path}
+	return NewFile(path)
 }
 
 // AsDir 类型断言[*fs.Dir]
@@ -48,6 +50,7 @@ func AsFile(c Common) (*File, bool) {
 // FileKind 文件方法接口
 type FileKind interface {
 	Common
+	Clear() error
 	ReadBytes() ([]byte, error)
 	ReadString() (string, error)
 	ReadByRow() ([]string, error)
@@ -59,12 +62,18 @@ type FileKind interface {
 	Rewrite(content string) error
 	WriteAt(position int64, content []byte) error
 	WriteStringAt(src string, position int64, content string) error
+	WriteStringAtLine(row int, content string, replace bool) error
 	Truncate(length int64)
 }
 
 // NewFile  创建一个 File 对象
 func NewFile(path string) *File {
-	return &File{path}
+	rows, err := ReadByRow(path)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	return &File{path, len(rows)}
 }
 
 // IsDir 判断是文件夹或文件
@@ -85,6 +94,11 @@ func (f *File) Create() error {
 // Copy 复制文件
 func (f *File) Copy(target string) error {
 	return CopyFileSafe(f.path, target)
+}
+
+// Clear 清空文件
+func (f *File) Clear() error {
+	return Clear(f.path)
 }
 
 // Remove 删除文件
@@ -172,6 +186,12 @@ func (f *File) WriteAt(position int64, content []byte) error {
 // 负数则从最后到开始定位
 func (f *File) WriteStringAt(src string, position int64, content string) error {
 	return WriteStringAt(f.path, position, content)
+}
+
+// WriteStringAtLine 在文件指定行写入内容
+// 传入字符串数据即可
+func (f *File) WriteStringAtLine(row int, content string, replace bool) error {
+	return WriteStringAtLine(f.path, row, content, replace)
 }
 
 // Truncate 截短文件内容，使文件为指定长度

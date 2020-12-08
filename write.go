@@ -40,6 +40,11 @@ func Rewrite(src, content string) error {
 	return err
 }
 
+// Clear 清空文件内容
+func Clear(src string) error {
+	return Rewrite(src, "")
+}
+
 // AppendBytes 追加文件内容
 func AppendBytes(src string, content []byte) error {
 
@@ -128,6 +133,50 @@ func WriteStringAt(src string, position int64, content string) error {
 	_, err = file.WriteAt([]byte(content), position)
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// WriteStringAtLine 在文件指定行写入内容
+// 传入字符串数据即可
+func WriteStringAtLine(src string, row int, content string, replace bool) error {
+	// 打开文件
+	file, err := readFile(src)
+	defer file.Close()
+	if err != nil {
+		return err
+	}
+
+	// 获取文件字节数
+	rows, err := ReadByRow(src)
+
+	if err != nil {
+		return err
+	}
+
+	// 重写文件
+	err = Clear(src)
+	if err != nil {
+		return err
+	}
+
+	for line, str := range rows {
+		if line == row {
+			err := AppendString(src, content)
+			if err != nil {
+				return err
+			}
+
+			if replace {
+				continue
+			}
+		}
+		err := AppendString(src, str)
+		if err != nil {
+			return err
+		}
+
 	}
 
 	return nil
