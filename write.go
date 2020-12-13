@@ -8,7 +8,7 @@ import (
 
 func openFile(src string) (*os.File, error) {
 	//打开文件
-	file, err := os.OpenFile(src, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, os.ModePerm)
+	file, err := os.OpenFile(src, os.O_WRONLY|os.O_TRUNC, os.ModePerm)
 	if err != nil {
 		return nil, err
 	}
@@ -18,7 +18,7 @@ func openFile(src string) (*os.File, error) {
 
 func appendFile(src string) (*os.File, error) {
 	//打开文件
-	file, err := os.OpenFile(src, os.O_WRONLY|os.O_CREATE|os.O_APPEND, os.ModePerm)
+	file, err := os.OpenFile(src, os.O_WRONLY|os.O_APPEND, os.ModePerm)
 	if err != nil {
 		return nil, err
 	}

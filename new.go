@@ -15,6 +15,7 @@ type File struct {
 // Common 文件夹和文件公用方法接口
 type Common interface {
 	Create() error
+	CheckAndCreate() error
 	Copy(target string) error
 	Remove() error
 	Move(target string) error
@@ -89,6 +90,15 @@ func (f *File) Path() string {
 // Create 创建文件
 func (f *File) Create() error {
 	return CreateFile(f.path)
+}
+
+// CheckAndCreate 检查文件，若文件不存在则创建
+func (f *File) CheckAndCreate() error {
+	if !f.Exist() {
+
+		return CreateFile(f.path)
+	}
+	return nil
 }
 
 // Copy 复制文件
@@ -247,6 +257,15 @@ func (d *Dir) IsDir() bool {
 // Create 创建文件夹
 func (d *Dir) Create() error {
 	return CreateDir(d.path)
+}
+
+// CheckAndCreate 检查目录，若目录不存在则创建
+func (d *Dir) CheckAndCreate() error {
+	if !d.Exist() {
+
+		return CreateDir(d.path)
+	}
+	return nil
 }
 
 // Info 原生方法读取目录信息

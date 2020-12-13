@@ -8,7 +8,7 @@ import (
 )
 
 func readFile(src string) (*os.File, error) {
-	file, err := os.OpenFile(src, os.O_CREATE|os.O_RDONLY, os.ModePerm)
+	file, err := os.OpenFile(src, os.O_RDONLY, os.ModePerm)
 
 	if err != nil {
 		return nil, err
