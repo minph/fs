@@ -124,3 +124,21 @@ func All(folder string) ([]string, error) {
 
 	return result, nil
 }
+
+// Map 读取目录和子目录下的所有文件名信息，然后进行操作
+//
+// 全部为文件名，不再包含目录名
+func Map(folder string, call func(index int, file string)) error {
+	content, err := All(folder)
+	if err != nil {
+		return err
+	}
+
+	for index, file := range content {
+		if call != nil {
+			call(index, file)
+		}
+	}
+
+	return nil
+}

@@ -20,12 +20,12 @@ func Move(src, target string) error {
 // MoveSafe 安全地移动文件或文件夹
 // 保证跨目录的安全性
 func MoveSafe(src, target string) error {
-	err := CreateFile(src)
+	err := Create(src)
 
 	if err != nil {
 		return err
 	}
-	err = CreateFile(target)
+	err = Create(target)
 
 	if err != nil {
 		return err

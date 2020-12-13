@@ -1,10 +1,11 @@
 package fs
 
 import (
-	"github.com/minph/fs/utils"
 	"io"
 	"os"
 	"path"
+
+	"github.com/minph/fs/utils"
 )
 
 // Create 跨目录创建文件
@@ -28,7 +29,6 @@ func Create(src string) error {
 	return nil
 }
 
-
 //Copy 复制文件
 func Copy(src, target string) error {
 
@@ -50,7 +50,6 @@ func Copy(src, target string) error {
 	_, err = io.Copy(destFile, srcFile)
 	return err
 }
-
 
 // CopySafe 安全地复制文件
 //

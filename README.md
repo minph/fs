@@ -6,208 +6,83 @@
 
 # 概览
 
-- [func AppendBytes(src string, content []byte) error](#AppendBytes)
-- [func AppendString(src, content string) error](#AppendString)
-- [func CopyDir(folder, target string) error](#CopyDir)
-- [func CopyFile(src, target string) error](#CopyFile)
-- [func CopyFileSafe(src, target string) error](#CopyFileSafe)
-- [func CreateDir(folder string) error](#CreateDir)
-- [func CreateFile(src string) error](#CreateFile)
-- [func DirAll(folder string) ([]string, error)](#DirAll)
-- [func DirInfo(folder string) ([]os.FileInfo, error)](#DirInfo)
-- [func DirSub(folder string) ([]string, error)](#DirSub)
-- [func DirSubfile(folder string) ([]string, error)](#DirSubfile)
-- [func DirSubfolder(folder string) ([]string, error)](#DirSubfolder)
-- [func Exist(path string) bool](#Exist)
-- [func IsDir(path string) bool](#IsDir)
+- [func Append(src, content string) error](#Append)
+- [func Clear(src string) error](#Clear)
+- [func Copy(src, target string) error](#Copy)
+- [func CopySafe(src, target string) error](#CopySafe)
+- [func Create(src string) error](#Create)
 - [func Move(src, target string) error](#Move)
 - [func MoveSafe(src, target string) error](#MoveSafe)
-- [func ReadAt(src string, position int64) ([]byte, error)](#ReadAt)
-- [func ReadByBytes(src string, bufferSize int64) ([][]byte, error)](#ReadByBytes)
-- [func ReadByRow(src string) ([]string, error)](#ReadByRow)
-- [func ReadBytes(src string) ([]byte, error)](#ReadBytes)
-- [func ReadString(src string) (string, error)](#ReadString)
-- [func ReadStringAt(src string, position int64) (string, error)](#ReadStringAt)
+- [func ReadAll(src string) (string, error)](#ReadAll)
+- [func ReadBytes(src string, bufferSize int64) ([][]byte, error)](#ReadBytes)
+- [func ReadLineAt(src string, row int) (string, error)](#ReadLineAt)
+- [func ReadLines(src string) ([]string, error)](#ReadLines)
 - [func Remove(src string) error](#Remove)
 - [func RemoveAll(src string) error](#RemoveAll)
-- [func RemoveDirContent(folder string) error](#RemoveDirContent)
-- [func RemoveExt(folder, ext string) error](#RemoveExt)
-- [func RemoveNamesContain(folder, containStr string) error](#RemoveNamesContain)
-- [func RemoveNamesRegexp(folder, pattern string) error](#RemoveNamesRegexp)
 - [func Rename(src, newName string) error](#Rename)
 - [func Rewrite(src, content string) error](#Rewrite)
 - [func Truncate(src string, length int64) error](#Truncate)
-- [func WriteAt(src string, position int64, content []byte) error](#WriteAt)
-- [func WriteStringAt(src string, position int64, content string) error](#WriteStringAt)
-- [type Common](#Common)
-  - [func New(path string) Common](#New)
-- [type Dir](#Dir)
-  - [func AsDir(c Common) (\*Dir, bool)](#AsDir)
-  - [func NewDir(path string) \*Dir](#NewDir)
-  - [func (d \*Dir) All() ([]string, error)](#Dir.All)
-  - [func (d \*Dir) Copy(target string) error](#Dir.Copy)
-  - [func (d \*Dir) Create() error](#Dir.Create)
-  - [func (d \*Dir) Exist() bool](#Dir.Exist)
-  - [func (d \*Dir) Info() ([]os.FileInfo, error)](#Dir.Info)
-  - [func (d \*Dir) IsDir() bool](#Dir.IsDir)
-  - [func (d \*Dir) Join(src string) string](#Dir.Join)
-  - [func (d \*Dir) JoinBase(src string) string](#Dir.JoinBase)
-  - [func (d \*Dir) Move(target string) error](#Dir.Move)
-  - [func (d \*Dir) Path() string](#Dir.Path)
-  - [func (d \*Dir) Remove() error](#Dir.Remove)
-  - [func (d \*Dir) RemoveContent() error](#Dir.RemoveContent)
-  - [func (d \*Dir) RemoveExt(ext string) error](#Dir.RemoveExt)
-  - [func (d \*Dir) RemoveNamesContain(containStr string) error](#Dir.RemoveNamesContain)
-  - [func (d \*Dir) RemoveNamesRegexp(pattern string) error](#Dir.RemoveNamesRegexp)
-  - [func (d \*Dir) Rename(newName string) error](#Dir.Rename)
-  - [func (d \*Dir) Sub() ([]string, error)](#Dir.Sub)
-  - [func (d \*Dir) Subfile() ([]string, error)](#Dir.Subfile)
-  - [func (d \*Dir) Subfolder() ([]string, error)](#Dir.Subfolder)
-- [type DirKind](#DirKind)
+- [func WriteLine(src string, content string, row int, replace bool) error](#WriteLine)
 - [type File](#File)
-  - [func AsFile(c Common) (\*File, bool)](#AsFile)
-  - [func NewFile(path string) \*File](#NewFile)
-  - [func (f \*File) AppendBytes(content []byte) error](#File.AppendBytes)
-  - [func (f \*File) AppendString(content string) error](#File.AppendString)
-  - [func (f \*File) Copy(target string) error](#File.Copy)
-  - [func (f \*File) Create() error](#File.Create)
-  - [func (f \*File) Exist() bool](#File.Exist)
-  - [func (f \*File) IsDir() bool](#File.IsDir)
-  - [func (f \*File) Join(folder string) string](#File.Join)
-  - [func (f \*File) JoinBase(folder string) string](#File.JoinBase)
-  - [func (f \*File) Move(target string) error](#File.Move)
-  - [func (f \*File) Path() string](#File.Path)
-  - [func (f \*File) ReadAt(position int64) ([]byte, error)](#File.ReadAt)
-  - [func (f \*File) ReadByBytes(bufferSize int64) ([][]byte, error)](#File.ReadByBytes)
-  - [func (f \*File) ReadByRow() ([]string, error)](#File.ReadByRow)
-  - [func (f \*File) ReadBytes() ([]byte, error)](#File.ReadBytes)
-  - [func (f \*File) ReadString() (string, error)](#File.ReadString)
-  - [func (f \*File) ReadStringAt(position int64) (string, error)](#File.ReadStringAt)
-  - [func (f \*File) Remove() error](#File.Remove)
-  - [func (f \*File) Rename(newName string) error](#File.Rename)
-  - [func (f \*File) Rewrite(content string) error](#File.Rewrite)
-  - [func (f \*File) Truncate(length int64) error](#File.Truncate)
-  - [func (f \*File) WriteAt(position int64, content []byte) error](#File.WriteAt)
-  - [func (f \*File) WriteStringAt(src string, position int64, content string) error](#File.WriteStringAt)
-- [type FileKind](#FileKind)
+  - [func New(src string) \*File](#New)
+  - [func (f *File) Append(content string) *File](#File.Append)
+  - [func (f *File) Check(call func(err []error)) *File](#File.Check)
+  - [func (f *File) Clear() *File](#File.Clear)
+  - [func (f *File) Copy(target string) *File](#File.Copy)
+  - [func (f *File) CopySafe(target string) *File](#File.CopySafe)
+  - [func (f *File) Create() *File](#File.Create)
+  - [func (f *File) Do(call func(f *File)) \*File](#File.Do)
+  - [func (f *File) Move(target string) *File](#File.Move)
+  - [func (f *File) ReadAll() *File](#File.ReadAll)
+  - [func (f *File) ReadBytes(bufferSize int64) *File](#File.ReadBytes)
+  - [func (f *File) ReadLineAt(row int) *File](#File.ReadLineAt)
+  - [func (f *File) ReadLines() *File](#File.ReadLines)
+  - [func (f *File) Rename(name string) *File](#File.Rename)
+  - [func (f *File) Rewrite(content string) *File](#File.Rewrite)
+  - [func (f *File) Truncate(length int64) *File](#File.Truncate)
+  - [func (f *File) WriteLine(content string, row int, replace bool) *File](#File.WriteLine)
 
-# 详情
+## <a name="Append">func</a> Append
 
 ```go
-func AppendBytes(src string, content []byte) error
+func Append(src, content string) error
 ```
 
-AppendBytes 追加文件内容
+Append 以字符串方式追加文件内容
 
-## <a name="AppendString">func</a> AppendString
+## <a name="Clear">func</a> Clear
 
 ```go
-func AppendString(src, content string) error
+func Clear(src string) error
 ```
 
-AppendString 以字符串方式追加文件内容
+Clear 清空文件内容
 
-## <a name="CopyDir">func</a> CopyDir
+## <a name="Copy">func</a> Copy
 
 ```go
-func CopyDir(folder, target string) error
+func Copy(src, target string) error
 ```
 
-CopyDir 复制文件夹
+Copy 复制文件
 
-## <a name="CopyFile">func</a> CopyFile
+## <a name="CopySafe">func</a> CopySafe
 
 ```go
-func CopyFile(src, target string) error
+func CopySafe(src, target string) error
 ```
 
-CopyFile 复制文件
-
-## <a name="CopyFileSafe">func</a> CopyFileSafe
-
-```go
-func CopyFileSafe(src, target string) error
-```
-
-CopyFileSafe 安全地复制文件
+CopySafe 安全地复制文件
 
 保证复制位置文件存在
 
-## <a name="CreateDir">func</a> CreateDir
+## <a name="Create">func</a> Create
 
 ```go
-func CreateDir(folder string) error
+func Create(src string) error
 ```
 
-CreateDir 跨目录创建文件夹
-
-## <a name="CreateFile">func</a> CreateFile
-
-```go
-func CreateFile(src string) error
-```
-
-CreateFile 跨目录创建文件
-
-## <a name="DirAll">func</a> DirAll
-
-```go
-func DirAll(folder string) ([]string, error)
-```
-
-DirAll 读取目录和子目录下的所有文件名信息
-
-全部为文件名，不再包含目录名
-
-## <a name="DirInfo">func</a> DirInfo
-
-```go
-func DirInfo(folder string) ([]os.FileInfo, error)
-```
-
-DirInfo 原生方法读取目录信息
-
-## <a name="DirSub">func</a> DirSub
-
-```go
-func DirSub(folder string) ([]string, error)
-```
-
-DirSub 读取目录下所有文件和目录信息
-
-## <a name="DirSubfile">func</a> DirSubfile
-
-```go
-func DirSubfile(folder string) ([]string, error)
-```
-
-DirSubfile 读取目录下的所有子文件
-即不包含子目录
-
-## <a name="DirSubfolder">func</a> DirSubfolder
-
-```go
-func DirSubfolder(folder string) ([]string, error)
-```
-
-DirSubfolder 读取目录下的子文件夹
-即不包含子文件
-
-## <a name="Exist">func</a> Exist
-
-```go
-func Exist(path string) bool
-```
-
-Exist 判断所给路径文件或文件夹是否存在
-
-## <a name="IsDir">func</a> IsDir
-
-```go
-func IsDir(path string) bool
-```
-
-IsDir 判断是不是文件夹
+Create 跨目录创建文件
 
 ## <a name="Move">func</a> Move
 
@@ -226,59 +101,37 @@ func MoveSafe(src, target string) error
 MoveSafe 安全地移动文件或文件夹
 保证跨目录的安全性
 
-## <a name="ReadAt">func</a> ReadAt
+## <a name="ReadAll">func</a> ReadAll
 
 ```go
-func ReadAt(src string, position int64) ([]byte, error)
+func ReadAll(src string) (string, error)
 ```
 
-ReadAt 读取指定位置之后内容
-
-正数则从开始到最后定位
-负数则从最后到开始定位
-
-## <a name="ReadByBytes">func</a> ReadByBytes
-
-```go
-func ReadByBytes(src string, bufferSize int64) ([][]byte, error)
-```
-
-ReadByBytes 按块方式读取文件内容
-
-## <a name="ReadByRow">func</a> ReadByRow
-
-```go
-func ReadByRow(src string) ([]string, error)
-```
-
-ReadByRow 按行读取文件内容
+ReadAll 读取文件全部内容并返回字符串
 
 ## <a name="ReadBytes">func</a> ReadBytes
 
 ```go
-func ReadBytes(src string) ([]byte, error)
+func ReadBytes(src string, bufferSize int64) ([][]byte, error)
 ```
 
-ReadBytes 读取文件全部内容
+ReadBytes 按 byte 块方式读取文件内容
 
-## <a name="ReadString">func</a> ReadString
+## <a name="ReadLineAt">func</a> ReadLineAt
 
 ```go
-func ReadString(src string) (string, error)
+func ReadLineAt(src string, row int) (string, error)
 ```
 
-ReadString 读取文件全部内容并返回字符串
+ReadLineAt 读取指定行的内容
 
-## <a name="ReadStringAt">func</a> ReadStringAt
+## <a name="ReadLines">func</a> ReadLines
 
 ```go
-func ReadStringAt(src string, position int64) (string, error)
+func ReadLines(src string) ([]string, error)
 ```
 
-ReadStringAt 读取指定位置之后内容
-返回字符串
-正数则从开始到最后定位
-负数则从最后到开始定位
+ReadLines 按行读取文件内容
 
 ## <a name="Remove">func</a> Remove
 
@@ -297,38 +150,6 @@ func RemoveAll(src string) error
 ```
 
 RemoveAll 同 os.RemoveAll
-
-## <a name="RemoveDirContent">func</a> RemoveDirContent
-
-```go
-func RemoveDirContent(folder string) error
-```
-
-RemoveDirContent 删除目录全部内容，但不包含目录自身
-
-## <a name="RemoveExt">func</a> RemoveExt
-
-```go
-func RemoveExt(folder, ext string) error
-```
-
-RemoveExt 删除目录下指定后缀名的文件
-
-## <a name="RemoveNamesContain">func</a> RemoveNamesContain
-
-```go
-func RemoveNamesContain(folder, containStr string) error
-```
-
-RemoveNamesContain 目录下所有文件中，删除文件名包含给定字符的文件
-
-## <a name="RemoveNamesRegexp">func</a> RemoveNamesRegexp
-
-```go
-func RemoveNamesRegexp(folder, pattern string) error
-```
-
-RemoveNamesRegexp 目录下所有文件中，删除文件名匹配正则表达式的文件
 
 ## <a name="Rename">func</a> Rename
 
@@ -357,429 +178,139 @@ Truncate 截短文件内容，使文件为指定长度
 传入 0 则清空文件
 传入负数则截短该数值长度
 
-## <a name="WriteAt">func</a> WriteAt
+## <a name="WriteLine">func</a> WriteLine
 
 ```go
-func WriteAt(src string, position int64, content []byte) error
+func WriteLine(src string, content string, row int, replace bool) error
 ```
 
-WriteAt 在文件指定位置写入内容
-
-正数则从开始到最后定位
-负数则从最后到开始定位
-
-## <a name="WriteStringAt">func</a> WriteStringAt
-
-```go
-func WriteStringAt(src string, position int64, content string) error
-```
-
-WriteStringAt 在文件指定位置写入内容
+WriteLine 在文件指定行写入内容
 传入字符串数据即可
-正数则从开始到最后定位
-负数则从最后到开始定位
-
-## <a name="Common">type</a> Common
-
-```go
-type Common interface {
-    Create() error
-    Copy(target string) error
-    Remove() error
-    Move(target string) error
-    Rename(newName string) error
-    Exist() bool
-    IsDir() bool
-    Path() string
-    Join(src string) string
-    JoinBase(src string) string
-}
-```
-
-Common 文件夹和文件公用方法接口
-
-### <a name="New">func</a> New
-
-```go
-func New(path string) Common
-```
-
-New 在不判断文件夹还是文件的情况下，支持通用方法接口
-
-## <a name="Dir">type</a> Dir
-
-```go
-type Dir struct {
-    // contains filtered or unexported fields
-}
-
-```
-
-Dir 目录
-
-### <a name="AsDir">func</a> AsDir
-
-```go
-func AsDir(c Common) (*Dir, bool)
-```
-
-AsDir 类型断言[*fs.Dir]
-
-### <a name="NewDir">func</a> NewDir
-
-```go
-func NewDir(path string) *Dir
-```
-
-NewDir 创建一个 Dir 对象
-
-### <a name="Dir.All">func</a> (\*Dir) All
-
-```go
-func (d *Dir) All() ([]string, error)
-```
-
-All 读取目录和子目录下的所有文件名信息
-
-全部为文件名，不再包含目录名
-
-### <a name="Dir.Copy">func</a> (\*Dir) Copy
-
-```go
-func (d *Dir) Copy(target string) error
-```
-
-Copy 复制文件夹
-
-### <a name="Dir.Create">func</a> (\*Dir) Create
-
-```go
-func (d *Dir) Create() error
-```
-
-Create 创建文件夹
-
-### <a name="Dir.Exist">func</a> (\*Dir) Exist
-
-```go
-func (d *Dir) Exist() bool
-```
-
-Exist 判断文件夹是否存在
-
-### <a name="Dir.Info">func</a> (\*Dir) Info
-
-```go
-func (d *Dir) Info() ([]os.FileInfo, error)
-```
-
-Info 原生方法读取目录信息
-
-### <a name="Dir.IsDir">func</a> (\*Dir) IsDir
-
-```go
-func (d *Dir) IsDir() bool
-```
-
-IsDir 判断是文件夹或文件
-
-### <a name="Dir.Join">func</a> (\*Dir) Join
-
-```go
-func (d *Dir) Join(src string) string
-```
-
-Join 以此目录为基础目录，拼接完整路径
-
-### <a name="Dir.JoinBase">func</a> (\*Dir) JoinBase
-
-```go
-func (d *Dir) JoinBase(src string) string
-```
-
-JoinBase 以此目录为基础目录，只拼接一级路径
-
-### <a name="Dir.Move">func</a> (\*Dir) Move
-
-```go
-func (d *Dir) Move(target string) error
-```
-
-Move 移动文件夹
-
-### <a name="Dir.Path">func</a> (\*Dir) Path
-
-```go
-func (d *Dir) Path() string
-```
-
-Path 获取文件路径
-
-### <a name="Dir.Remove">func</a> (\*Dir) Remove
-
-```go
-func (d *Dir) Remove() error
-```
-
-Remove 删除文件夹
-
-### <a name="Dir.RemoveContent">func</a> (\*Dir) RemoveContent
-
-```go
-func (d *Dir) RemoveContent() error
-```
-
-RemoveContent 删除目录全部内容，但不包含目录自身
-
-### <a name="Dir.RemoveExt">func</a> (\*Dir) RemoveExt
-
-```go
-func (d *Dir) RemoveExt(ext string) error
-```
-
-RemoveExt 删除目录下指定后缀名的文件
-
-### <a name="Dir.RemoveNamesContain">func</a> (\*Dir) RemoveNamesContain
-
-```go
-func (d *Dir) RemoveNamesContain(containStr string) error
-```
-
-RemoveNamesContain 目录下所有文件中，删除文件名包含给定字符的文件
-
-### <a name="Dir.RemoveNamesRegexp">func</a> (\*Dir) RemoveNamesRegexp
-
-```go
-func (d *Dir) RemoveNamesRegexp(pattern string) error
-```
-
-RemoveNamesRegexp 目录下所有文件中，删除文件名匹配正则表达式的文件
-
-### <a name="Dir.Rename">func</a> (\*Dir) Rename
-
-```go
-func (d *Dir) Rename(newName string) error
-```
-
-Rename 重命名文件夹
-
-### <a name="Dir.Sub">func</a> (\*Dir) Sub
-
-```go
-func (d *Dir) Sub() ([]string, error)
-```
-
-Sub 读取目录下所有文件和目录信息
-
-### <a name="Dir.Subfile">func</a> (\*Dir) Subfile
-
-```go
-func (d *Dir) Subfile() ([]string, error)
-```
-
-Subfile 读取目录下的所有子文件
-即不包含子目录
-
-### <a name="Dir.Subfolder">func</a> (\*Dir) Subfolder
-
-```go
-func (d *Dir) Subfolder() ([]string, error)
-```
-
-Subfolder 读取目录下的子文件夹
-即不包含子文件
-
-## <a name="DirKind">type</a> DirKind
-
-```go
-type DirKind interface {
-    Common
-    Info() ([]os.FileInfo, error)
-    Sub() ([]string, error)
-    Subfolder() ([]string, error)
-    Subfile() ([]string, error)
-    All() ([]string, error)
-    RemoveContent() error
-    RemoveExt(ext string) error
-    RemoveNamesRegexp(pattern string) error
-}
-```
-
-DirKind 文件夹方法接口
+row 修改的行数
+replace 是否替换当前行
 
 ## <a name="File">type</a> File
 
 ```go
 type File struct {
-    // contains filtered or unexported fields
+    utils.Wrapper
+    Path    string      //文件地址
+    DirName string      // 文件目录名
+    Res     interface{} // 函数返回值
 }
 
 ```
 
-File 文件
+File 文件类型结构体
 
-### <a name="AsFile">func</a> AsFile
-
-```go
-func AsFile(c Common) (*File, bool)
-```
-
-AsFile 类型断言[*fs.File]
-
-### <a name="NewFile">func</a> NewFile
+### <a name="New">func</a> New
 
 ```go
-func NewFile(path string) *File
+func New(src string) *File
 ```
 
-NewFile 创建一个 File 对象
+New 创建文件类型结构体
 
-### <a name="File.AppendBytes">func</a> (\*File) AppendBytes
+### <a name="File.Append">func</a> (\*File) Append
 
 ```go
-func (f *File) AppendBytes(content []byte) error
+func (f *File) Append(content string) *File
 ```
 
-AppendBytes 追加文件内容
+Append 以字符串方式追加文件内容
 
-### <a name="File.AppendString">func</a> (\*File) AppendString
+### <a name="File.Check">func</a> (\*File) Check
 
 ```go
-func (f *File) AppendString(content string) error
+func (f *File) Check(call func(err []error)) *File
 ```
 
-AppendString 追加文件内容
+Check 检查错误
+
+### <a name="File.Clear">func</a> (\*File) Clear
+
+```go
+func (f *File) Clear() *File
+```
+
+Clear 清空文件内容
 
 ### <a name="File.Copy">func</a> (\*File) Copy
 
 ```go
-func (f *File) Copy(target string) error
+func (f *File) Copy(target string) *File
 ```
 
 Copy 复制文件
 
+### <a name="File.CopySafe">func</a> (\*File) CopySafe
+
+```go
+func (f *File) CopySafe(target string) *File
+```
+
+CopySafe 安全地复制文件
+
 ### <a name="File.Create">func</a> (\*File) Create
 
 ```go
-func (f *File) Create() error
+func (f *File) Create() *File
 ```
 
 Create 创建文件
 
-### <a name="File.Exist">func</a> (\*File) Exist
+### <a name="File.Do">func</a> (\*File) Do
 
 ```go
-func (f *File) Exist() bool
+func (f *File) Do(call func(f *File)) *File
 ```
 
-Exist 判断文件是否存在
-
-### <a name="File.IsDir">func</a> (\*File) IsDir
-
-```go
-func (f *File) IsDir() bool
-```
-
-IsDir 判断是文件夹或文件
-
-### <a name="File.Join">func</a> (\*File) Join
-
-```go
-func (f *File) Join(folder string) string
-```
-
-Join 以此目录为基础目录，拼接完整路径
-
-### <a name="File.JoinBase">func</a> (\*File) JoinBase
-
-```go
-func (f *File) JoinBase(folder string) string
-```
-
-JoinBase 以此目录为基础目录，只拼接一级路径
+Do 对结构体进行链式操作
 
 ### <a name="File.Move">func</a> (\*File) Move
 
 ```go
-func (f *File) Move(target string) error
+func (f *File) Move(target string) *File
 ```
 
-Move 移动文件
+Rename 重命名文件
 
-### <a name="File.Path">func</a> (\*File) Path
+### <a name="File.ReadAll">func</a> (\*File) ReadAll
 
 ```go
-func (f *File) Path() string
+func (f *File) ReadAll() *File
 ```
 
-Path 获取文件路径
-
-### <a name="File.ReadAt">func</a> (\*File) ReadAt
-
-```go
-func (f *File) ReadAt(position int64) ([]byte, error)
-```
-
-ReadAt 读取指定位置之后内容
-
-正数则从开始到最后定位
-负数则从最后到开始定位
-
-### <a name="File.ReadByBytes">func</a> (\*File) ReadByBytes
-
-```go
-func (f *File) ReadByBytes(bufferSize int64) ([][]byte, error)
-```
-
-ReadByBytes 按块方式读取文件内容
-
-### <a name="File.ReadByRow">func</a> (\*File) ReadByRow
-
-```go
-func (f *File) ReadByRow() ([]string, error)
-```
-
-ReadByRow 按行读取文件内容
+ReadAll 读取文件全部内容并返回字符串
 
 ### <a name="File.ReadBytes">func</a> (\*File) ReadBytes
 
 ```go
-func (f *File) ReadBytes() ([]byte, error)
+func (f *File) ReadBytes(bufferSize int64) *File
 ```
 
-ReadBytes 读取文件返回字符串
+ReadBytes 按 byte 块方式读取文件内容
 
-### <a name="File.ReadString">func</a> (\*File) ReadString
+### <a name="File.ReadLineAt">func</a> (\*File) ReadLineAt
 
 ```go
-func (f *File) ReadString() (string, error)
+func (f *File) ReadLineAt(row int) *File
 ```
 
-ReadString 读取文件返回字符串
+ReadLineAt 读取指定行的内容
 
-### <a name="File.ReadStringAt">func</a> (\*File) ReadStringAt
+### <a name="File.ReadLines">func</a> (\*File) ReadLines
 
 ```go
-func (f *File) ReadStringAt(position int64) (string, error)
+func (f *File) ReadLines() *File
 ```
 
-ReadStringAt 读取指定位置之后内容
-返回字符串
-正数则从开始到最后定位
-负数则从最后到开始定位
-
-### <a name="File.Remove">func</a> (\*File) Remove
-
-```go
-func (f *File) Remove() error
-```
-
-Remove 删除文件
+ReadLines 按行读取文件内容
 
 ### <a name="File.Rename">func</a> (\*File) Rename
 
 ```go
-func (f *File) Rename(newName string) error
+func (f *File) Rename(name string) *File
 ```
 
 Rename 重命名文件
@@ -787,61 +318,304 @@ Rename 重命名文件
 ### <a name="File.Rewrite">func</a> (\*File) Rewrite
 
 ```go
-func (f *File) Rewrite(content string) error
+func (f *File) Rewrite(content string) *File
 ```
 
-Rewrite 重写文件内容
+Rewrite 对文件覆盖写入数据
 
 ### <a name="File.Truncate">func</a> (\*File) Truncate
 
 ```go
-func (f *File) Truncate(length int64) error
+func (f *File) Truncate(length int64) *File
 ```
 
 Truncate 截短文件内容，使文件为指定长度
 传入 0 则清空文件
 传入负数则截短该数值长度
 
-### <a name="File.WriteAt">func</a> (\*File) WriteAt
+### <a name="File.WriteLine">func</a> (\*File) WriteLine
 
 ```go
-func (f *File) WriteAt(position int64, content []byte) error
+func (f *File) WriteLine(content string, row int, replace bool) *File
 ```
 
-WriteAt 在文件指定位置写入内容
-
-正数则从开始到最后定位
-负数则从最后到开始定位
-
-### <a name="File.WriteStringAt">func</a> (\*File) WriteStringAt
-
-```go
-func (f *File) WriteStringAt(src string, position int64, content string) error
-```
-
-WriteStringAt 在文件指定位置写入内容
+WriteLine 在文件指定行写入内容
 传入字符串数据即可
-正数则从开始到最后定位
-负数则从最后到开始定位
+row 修改的行数
+replace 是否替换当前行
 
-## <a name="FileKind">type</a> FileKind
+# dir 目录操作包
+
+`import "github.com/minph/fs/dir"`
+
+## 概览
+
+- [func All(folder string) ([]string, error)](#All)
+- [func Content(folder string) ([]string, error)](#Content)
+- [func Copy(folder, target string) error](#Copy)
+- [func Create(folder string) error](#Create)
+- [func Files(folder string) ([]string, error)](#Files)
+- [func Folders(folder string) ([]string, error)](#Folders)
+- [func Info(folder string) ([]os.FileInfo, error)](#Info)
+- [func Is(path string) bool](#Is)
+- [func Map(folder string, call func(index int, file string)) error](#Map)
+- [func RemoveContain(folder, containStr string) error](#RemoveContain)
+- [func RemoveContent(folder string) error](#RemoveContent)
+- [func RemoveExt(folder, ext string) error](#RemoveExt)
+- [func RemoveRegexp(folder, pattern string) error](#RemoveRegexp)
+- [type Dir](#Dir)
+  - [func New(src string) \*Dir](#New)
+  - [func (d *Dir) All() *Dir](#Dir.All)
+  - [func (d *Dir) Content() *Dir](#Dir.Content)
+  - [func (d *Dir) Copy(target string) *Dir](#Dir.Copy)
+  - [func (d *Dir) Create() *Dir](#Dir.Create)
+  - [func (d *Dir) Files() *Dir](#Dir.Files)
+  - [func (d *Dir) Folders() *Dir](#Dir.Folders)
+  - [func (d *Dir) Info() *Dir](#Dir.Info)
+  - [func (d *Dir) Is() *Dir](#Dir.Is)
+  - [func (d *Dir) Map(call func(index int, file string)) *Dir](#Dir.Map)
+  - [func (d *Dir) RemoveContain(containStr string) *Dir](#Dir.RemoveContain)
+  - [func (d *Dir) RemoveContent() *Dir](#Dir.RemoveContent)
+  - [func (d *Dir) RemoveExt(ext string) *Dir](#Dir.RemoveExt)
+  - [func (d *Dir) RemoveRegexp(pattern string) *Dir](#Dir.RemoveRegexp)
+
+## <a name="All">func</a> All
 
 ```go
-type FileKind interface {
-    Common
-    ReadBytes() ([]byte, error)
-    ReadString() (string, error)
-    ReadByRow() ([]string, error)
-    ReadByBytes(bufferSize int64) ([][]byte, error)
-    ReadAt(position int64) ([]byte, error)
-    ReadStringAt(position int64) (string, error)
-    AppendBytes(content []byte) error
-    AppendString(content string) error
-    Rewrite(content string) error
-    WriteAt(position int64, content []byte) error
-    WriteStringAt(src string, position int64, content string) error
-    Truncate(length int64)
-}
+func All(folder string) ([]string, error)
 ```
 
-FileKind 文件方法接口
+All 读取目录和子目录下的所有文件名信息
+
+全部为文件名，不再包含目录名
+
+## <a name="Content">func</a> Content
+
+```go
+func Content(folder string) ([]string, error)
+```
+
+Content 读取目录下所有文件和目录信息
+
+## <a name="Copy">func</a> Copy
+
+```go
+func Copy(folder, target string) error
+```
+
+Copy 复制文件夹
+
+## <a name="Create">func</a> Create
+
+```go
+func Create(folder string) error
+```
+
+Create 跨目录创建文件夹
+
+## <a name="Files">func</a> Files
+
+```go
+func Files(folder string) ([]string, error)
+```
+
+Files 读取目录下的所有子文件
+即不包含子目录
+
+## <a name="Folders">func</a> Folders
+
+```go
+func Folders(folder string) ([]string, error)
+```
+
+Folders 读取目录下的子文件夹
+即不包含子文件
+
+## <a name="Info">func</a> Info
+
+```go
+func Info(folder string) ([]os.FileInfo, error)
+```
+
+Info 原生方法读取目录信息
+
+## <a name="Is">func</a> Is
+
+```go
+func Is(path string) bool
+```
+
+Is 判断是不是文件夹
+
+## <a name="Map">func</a> Map
+
+```go
+func Map(folder string, call func(index int, file string)) error
+```
+
+Map 读取目录和子目录下的所有文件名信息，然后进行操作
+
+全部为文件名，不再包含目录名
+
+## <a name="RemoveContain">func</a> RemoveContain
+
+```go
+func RemoveContain(folder, containStr string) error
+```
+
+RemoveContain 目录下所有文件中，删除文件名包含给定字符的文件
+
+## <a name="RemoveContent">func</a> RemoveContent
+
+```go
+func RemoveContent(folder string) error
+```
+
+RemoveContent 删除目录全部内容，但不包含目录自身
+
+## <a name="RemoveExt">func</a> RemoveExt
+
+```go
+func RemoveExt(folder, ext string) error
+```
+
+RemoveExt 删除目录下指定后缀名的文件
+
+## <a name="RemoveRegexp">func</a> RemoveRegexp
+
+```go
+func RemoveRegexp(folder, pattern string) error
+```
+
+RemoveRegexp 目录下所有文件中，删除文件名匹配正则表达式的文件
+
+## <a name="Dir">type</a> Dir
+
+```go
+type Dir struct {
+    utils.Wrapper
+    Path string      //目录地址
+    Res  interface{} // 函数返回值
+}
+
+```
+
+Dir 目录类型结构体
+
+### <a name="New">func</a> New
+
+```go
+func New(src string) *Dir
+```
+
+New 创建目录类型结构体
+
+### <a name="Dir.All">func</a> (\*Dir) All
+
+```go
+func (d *Dir) All() *Dir
+```
+
+All 读取目录和子目录下的所有文件名信息
+
+全部为文件名，不再包含目录名
+
+### <a name="Dir.Content">func</a> (\*Dir) Content
+
+```go
+func (d *Dir) Content() *Dir
+```
+
+Content 读取目录下所有文件和目录信息
+
+### <a name="Dir.Copy">func</a> (\*Dir) Copy
+
+```go
+func (d *Dir) Copy(target string) *Dir
+```
+
+Copy 复制文件夹
+
+### <a name="Dir.Create">func</a> (\*Dir) Create
+
+```go
+func (d *Dir) Create() *Dir
+```
+
+Create 跨目录创建文件夹
+
+### <a name="Dir.Files">func</a> (\*Dir) Files
+
+```go
+func (d *Dir) Files() *Dir
+```
+
+Files 读取目录下的所有子文件
+即不包含子目录
+
+### <a name="Dir.Folders">func</a> (\*Dir) Folders
+
+```go
+func (d *Dir) Folders() *Dir
+```
+
+Folders 读取目录下的子文件夹
+即不包含子文件
+
+### <a name="Dir.Info">func</a> (\*Dir) Info
+
+```go
+func (d *Dir) Info() *Dir
+```
+
+Info 原生方法读取目录信息
+
+### <a name="Dir.Is">func</a> (\*Dir) Is
+
+```go
+func (d *Dir) Is() *Dir
+```
+
+Is 判断是不是文件夹
+
+### <a name="Dir.Map">func</a> (\*Dir) Map
+
+```go
+func (d *Dir) Map(call func(index int, file string)) *Dir
+```
+
+Map 读取目录和子目录下的所有文件名信息，然后进行操作
+
+全部为文件名，不再包含目录名
+
+### <a name="Dir.RemoveContain">func</a> (\*Dir) RemoveContain
+
+```go
+func (d *Dir) RemoveContain(containStr string) *Dir
+```
+
+RemoveContain 目录下所有文件中，删除文件名包含给定字符的文件
+
+### <a name="Dir.RemoveContent">func</a> (\*Dir) RemoveContent
+
+```go
+func (d *Dir) RemoveContent() *Dir
+```
+
+RemoveContent 删除目录全部内容，但不包含目录自身
+
+### <a name="Dir.RemoveExt">func</a> (\*Dir) RemoveExt
+
+```go
+func (d *Dir) RemoveExt(ext string) *Dir
+```
+
+RemoveExt 删除目录下指定后缀名的文件
+
+### <a name="Dir.RemoveRegexp">func</a> (\*Dir) RemoveRegexp
+
+```go
+func (d *Dir) RemoveRegexp(pattern string) *Dir
+```
+
+RemoveRegexp 目录下所有文件中，删除文件名匹配正则表达式的文件
