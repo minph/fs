@@ -1,8 +1,9 @@
 package fs
 
 import (
-	"github.com/minph/fs/utils"
 	"path"
+
+	"github.com/minph/fs/utils"
 )
 
 // File 文件类型结构体
@@ -131,7 +132,7 @@ func (f *File) WriteLine(content string, row int, replace bool) *File {
 // Check 检查错误
 func (f *File) Check(call func(err []error)) *File {
 	if f.GetError() {
-		call(f.Err)
+		call(f.Errs)
 	}
 	return f
 }

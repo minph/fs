@@ -2,35 +2,45 @@ package utils
 
 // Wrapper 包含错误类型的包装器
 type Wrapper struct {
-	Err []error     // 错误信息指针切片
-	Val interface{} // 包装值
+	Errs []error     // 错误信息指针切片
+	Val  interface{} // 包装值
 }
 
 // NewWrapper 创建包装器
-func NewWrapper(val interface{}, err error) *Wrapper {
+func NewWrapper(val interface{}) *Wrapper {
 	return &Wrapper{
-		Err: []error{err},
 		Val: val,
 	}
 }
 
 // AddError 错误信息指针切片中增加错误
-func (w *Wrapper) AddError(err ...error) *Wrapper {
-	for _, e := range err {
-		w.Err = append(w.Err, e)
+func (w *Wrapper) AddError(errs ...error) *Wrapper {
+	for _, e := range errs {
+		if e != nil {
+			w.Errs = append(w.Errs, e)
+		}
 	}
 	return w
 }
 
 // GetError 判断没有错误
 func (w *Wrapper) GetError() bool {
-	return len(w.Err) != 0
+	if len(w.Errs) == 0 {
+		return false
+	}
+
+	for _, err := range w.Errs {
+		if err != nil {
+			return true
+		}
+	}
+	return false
 }
 
 // Check 检查错误
-func (w *Wrapper) Check(call func(err []error)) *Wrapper {
+func (w *Wrapper) Check(call func(errs []error)) *Wrapper {
 	if w.GetError() {
-		call(w.Err)
+		call(w.Errs)
 	}
 	return w
 }
@@ -39,7 +49,7 @@ func (w *Wrapper) Check(call func(err []error)) *Wrapper {
 // 当存在错误时返回默认值
 func (w *Wrapper) Unwrap(call func(err []error), value interface{}) interface{} {
 	if w.GetError() {
-		call(w.Err)
+		call(w.Errs)
 		return value
 	}
 	return w.Val
